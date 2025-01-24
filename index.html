@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BL LOAN INFO</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: yellow;
+            text-align: center;
+            padding-top: 50px;
+        }
+
+        h1 {
+            color: red;
+            font-size: 36px;
+        }
+
+        .sub-title {
+            color: red;
+            font-size: 24px;
+            margin-bottom: 30px;
+        }
+
+        .input-container {
+            margin-top: 20px;
+            margin-bottom: 30px;
+        }
+
+        input[type="text"] {
+            width: 80%;
+            padding: 15px;
+            font-size: 20px;
+            border: 2px solid red;
+            border-radius: 10px;
+            color: red;
+        }
+
+        .info-button {
+            margin-top: 20px;
+            padding: 15px 30px;
+            background-color: blue;
+            color: red;
+            font-size: 20px;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+        }
+
+        .info-button:hover {
+            background-color: darkblue;
+        }
+
+        .response-container {
+            margin-top: 40px;
+            padding: 20px;
+            border: 2px solid red;
+            background-color: white;
+            display: inline-block;
+            text-align: left;
+            width: 80%;
+            max-width: 600px;
+        }
+
+        .response-line {
+            margin-bottom: 10px;
+            padding: 5px;
+            border-bottom: 1px dashed red;
+        }
+
+        .join-button {
+            margin-top: 30px;
+            padding: 15px 30px;
+            background-color: green;
+            color: white;
+            font-size: 20px;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+        }
+
+        .join-button:hover {
+            background-color: darkgreen;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="sub-title">FUTURE FIND TECH HUB</div>
+    
+    <h1>BL LOAN INFO</h1>
+
+    <div class="input-container">
+        <input type="text" id="mobileNumber" placeholder="Enter Number">
+    </div>
+
+    <button class="info-button" onclick="fetchInfo()">INFO</button>
+
+    <div id="response" class="response-container" style="display:none;"></div>
+
+    <button class="join-button" onclick="window.location.href='https://t.me/FUTUREFIND_TECH_HUB'">JOIN OUR CHANNEL</button>
+
+    <script>
+        function fetchInfo() {
+            let mobileNumber = document.getElementById("mobileNumber").value.trim();
+            if (!mobileNumber) {
+                alert("Please enter a mobile number.");
+                return;
+            }
+
+            let url = `https://myblapi.banglalink.net/api/v1/emergency-balance/${mobileNumber}`;
+
+            fetch(url)
+                .then(response => response.json())
+                .then(data => {
+                    let responseContainer = document.getElementById("response");
+                    responseContainer.style.display = "block";
+                    responseContainer.innerHTML = "";
+
+                    // Displaying the general response info like status, status_code, and message
+                    let statusLine = document.createElement("div");
+                    statusLine.className = "response-line";
+                    statusLine.textContent = `Status: ${data.status}`;
+                    responseContainer.appendChild(statusLine);
+
+                    let statusCodeLine = document.createElement("div");
+                    statusCodeLine.className = "response-line";
+                    statusCodeLine.textContent = `Status Code: ${data.status_code}`;
+                    responseContainer.appendChild(statusCodeLine);
+
+                    let messageLine = document.createElement("div");
+                    messageLine.className = "response-line";
+                    messageLine.textContent = `Message: ${data.message}`;
+                    responseContainer.appendChild(messageLine);
+
+                    // Now, handling the 'data' object and showing its values
+                    let dataObject = data.data; // This is the inner object from the response
+
+                    let idLine = document.createElement("div");
+                    idLine.className = "response-line";
+                    idLine.textContent = `ID: ${dataObject.id}`;
+                    responseContainer.appendChild(idLine);
+
+                    let msisdnLine = document.createElement("div");
+                    msisdnLine.className = "response-line";
+                    msisdnLine.textContent = `MSISDN: ${dataObject.msisdn}`;
+                    responseContainer.appendChild(msisdnLine);
+
+                    let dueLoanLine = document.createElement("div");
+                    dueLoanLine.className = "response-line";
+                    dueLoanLine.textContent = `Due Loan: ${dataObject.due_loan}`;
+                    responseContainer.appendChild(dueLoanLine);
+
+                    let expiresInLine = document.createElement("div");
+                    expiresInLine.className = "response-line";
+                    expiresInLine.textContent = `Expires In: ${dataObject.expires_in}`;
+                    responseContainer.appendChild(expiresInLine);
+                })
+                .catch(error => {
+                    alert("An error occurred. Please try again later.");
+                    console.error("Error fetching data:", error);
+                });
+        }
+    </script>
+
+</body>
+</html>
